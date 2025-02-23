@@ -69,7 +69,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void should_return_bad_request_when_request_is_not_valid() throws Exception {
+    void should_return_bad_request_when_save_product_name_is_not_valid() throws Exception {
         // given
         ProductRequest badRequest = new ProductRequest("",
                 "Test",
