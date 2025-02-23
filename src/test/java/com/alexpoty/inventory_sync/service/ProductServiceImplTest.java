@@ -2,7 +2,7 @@ package com.alexpoty.inventory_sync.service;
 
 import com.alexpoty.inventory_sync.dto.product.ProductRequest;
 import com.alexpoty.inventory_sync.dto.product.ProductResponse;
-import com.alexpoty.inventory_sync.exception.ProductNotFoundException;
+import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.model.Warehouse;

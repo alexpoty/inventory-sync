@@ -2,7 +2,7 @@ package com.alexpoty.inventory_sync.service;
 
 import com.alexpoty.inventory_sync.dto.product.ProductRequest;
 import com.alexpoty.inventory_sync.dto.product.ProductResponse;
-import com.alexpoty.inventory_sync.exception.ProductNotFoundException;
+import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse getProduct(Long id) {
         log.info("Product Service - Starting to get product by id");
         Product product = productRepository.findById(id).orElseThrow(
-                () -> new ProductNotFoundException("Product not found"));
+                () -> new ProductNotFoundException("Product  with id: " + id + " not found"));
         log.info("Product Service - Finished to get product by id");
         return productMapper.toProductResponse(product);
     }
