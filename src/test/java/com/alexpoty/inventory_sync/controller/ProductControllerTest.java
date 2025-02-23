@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -23,17 +24,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
+    @MockitoBean
     private ProductService productService;
     @Autowired
     private ObjectMapper mapper;
 
     private ProductResponse productResponse;
+    private ProductRequest productRequest;
 
     @BeforeEach
     void setUp() {
@@ -47,6 +49,11 @@ class ProductControllerTest {
                 Instant.now(),
                 Instant.now()
         );
+        productRequest = new ProductRequest("Test",
+                "Test",
+                new BigDecimal(123),
+                1,
+                1L);
     }
 
     @Test
@@ -55,9 +62,26 @@ class ProductControllerTest {
         when(productService.createProduct(any(ProductRequest.class))).thenReturn(productResponse);
         ResultActions result = mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(productResponse)));
+                .content(mapper.writeValueAsString(productRequest)));
         // assert
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("Test")));
+    }
+
+    @Test
+    void should_return_bad_request_when_request_is_not_valid() throws Exception {
+        // given
+        ProductRequest badRequest = new ProductRequest("",
+                "Test",
+                new BigDecimal(123),
+                1,
+                1L);
+        // when
+        when(productService.createProduct(any(ProductRequest.class))).thenReturn(productResponse);
+        ResultActions resultActions = mockMvc.perform(post("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(badRequest)));
+        // assert
+        resultActions.andExpect(status().isBadRequest());
     }
 }
