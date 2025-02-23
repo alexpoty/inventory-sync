@@ -2,6 +2,7 @@ package com.alexpoty.inventory_sync.service;
 
 import com.alexpoty.inventory_sync.dto.product.ProductRequest;
 import com.alexpoty.inventory_sync.dto.product.ProductResponse;
+import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.model.Warehouse;
@@ -12,9 +13,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,5 +83,57 @@ class ProductServiceImplTest {
         assertEquals(productRequest.name(), product.getName());
         assertEquals(productRequest.description(), product.getDescription());
         verify(productRepository, times(1)).save(any(Product.class));
+    }
+
+    @Test
+    public void should_find_products() {
+        // given
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> productPage = new PageImpl<>(List.of(product), pageable, 1);
+        // when
+        when(productRepository.findAll(any(Pageable.class))).thenReturn(productPage);
+        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
+        Page<ProductResponse> actual = productService.getProducts(0, 10);
+        // assert
+        assertEquals(productPage.getTotalElements(), actual.getTotalElements());
+        assertEquals(productPage.getTotalPages(), actual.getTotalPages());
+        verify(productRepository, times(1)).findAll(any(Pageable.class));
+    }
+
+    @Test
+    public void should_find_products_by_warehouse() {
+        // given
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> productPage = new PageImpl<>(List.of(product), pageable, 1);
+        // when
+        when(productRepository.findAllByWarehouseId(any(Long.class), any(Pageable.class))).thenReturn(productPage);
+        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
+        Page<ProductResponse> actual = productService.getProductsByWarehouseId(1L, 0, 10);
+        // assert
+        assertEquals(productPage.getTotalPages(), actual.getTotalPages());
+        assertEquals(productPage.getTotalElements(), actual.getTotalElements());
+        ProductResponse actualProduct = actual.getContent().getFirst();
+        assertEquals(actualProduct.name(), product.getName());
+        assertEquals(actualProduct.description(), product.getDescription());
+        verify(productRepository, times(1)).findAllByWarehouseId(any(Long.class), any(Pageable.class));
+    }
+
+    @Test
+    public void should_find_product_by_id() {
+        // when
+        when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
+        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
+        ProductResponse actual = productService.getProduct(1L);
+        // assert
+        assertEquals(actual.name(), product.getName());
+        assertEquals(actual.description(), product.getDescription());
+    }
+
+    @Test
+    public void should_throw_when_no_product_found() {
+        // when
+        when(productRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        // assertThrow
+        assertThrows(ProductNotFoundException.class, () -> productService.getProduct(1L));
     }
 }
