@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -83,5 +85,36 @@ class ProductControllerTest {
                 .content(mapper.writeValueAsString(badRequest)));
         // assert
         resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_get_product_by_id_status_200() throws Exception {
+        // when
+        when(productService.getProduct(any(Long.class))).thenReturn(productResponse);
+        ResultActions resultActions = mockMvc.perform(get("/products/1")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.name", is("Test")));
+    }
+
+    @Test
+    void should_get_product_page_status_200() throws Exception {
+        // when
+        when(productService.getProducts(any(Integer.class), any(Integer.class))).thenReturn(new PageImpl<>(List.of(productResponse)));
+        ResultActions resultActions = mockMvc.perform(get("/products?page=1&size=2")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    void should_get_products_by_warehouseId_status_200() throws Exception {
+        // when
+        when(productService.getProductsByWarehouseId(any(Long.class), any(Integer.class), any(Integer.class)))
+                .thenReturn(new PageImpl<>(List.of(productResponse)));
+        ResultActions resultActions = mockMvc.perform(get("/products?warehouseId=1&page=2&size=2")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isOk());
     }
 }
