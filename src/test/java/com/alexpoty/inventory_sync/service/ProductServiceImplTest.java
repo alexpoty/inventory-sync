@@ -2,16 +2,16 @@ package com.alexpoty.inventory_sync.service;
 
 import com.alexpoty.inventory_sync.dto.product.ProductRequest;
 import com.alexpoty.inventory_sync.dto.product.ProductResponse;
+import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -21,14 +21,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 class ProductServiceImplTest {
 
-    @Autowired
-    private ProductServiceImpl productService;
-    @MockitoBean
+    @Mock
     private ProductRepository productRepository;
+    @Mock
+    private ProductMapper productMapper;
+    @InjectMocks
+    private ProductServiceImpl productService;
     private Product product;
+    private ProductResponse productResponse;
 
     @BeforeEach
     void setUp() {
@@ -42,6 +44,16 @@ class ProductServiceImplTest {
                 .created_at(Instant.now())
                 .updated_at(Instant.now())
                 .build();
+        productResponse = new ProductResponse(
+                1L,
+                "Test",
+                "Test",
+                new BigDecimal(123),
+                1,
+                1L,
+                Instant.now(),
+                Instant.now()
+        );
     }
 
     @Test
@@ -54,9 +66,10 @@ class ProductServiceImplTest {
                 1,
                 1L
         );
-
         // when
         when(productRepository.save(any(Product.class))).thenReturn(this.product);
+        when(productMapper.toProduct(any(ProductRequest.class))).thenReturn(product);
+        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
         ProductResponse productResponse = productService.createProduct(productRequest);
         // assert
         assertNotNull(productResponse);

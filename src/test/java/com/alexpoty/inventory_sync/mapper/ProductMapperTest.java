@@ -4,19 +4,16 @@ import com.alexpoty.inventory_sync.dto.product.ProductRequest;
 import com.alexpoty.inventory_sync.dto.product.ProductResponse;
 import com.alexpoty.inventory_sync.model.Product;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+
 class ProductMapperTest {
 
-    @Autowired
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper = new ProductMapperImpl();
 
     @Test
     void should_convert_product_to_dto() {

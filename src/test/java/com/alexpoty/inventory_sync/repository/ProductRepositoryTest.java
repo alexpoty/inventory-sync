@@ -2,12 +2,11 @@ package com.alexpoty.inventory_sync.repository;
 
 import com.alexpoty.inventory_sync.model.Product;
 import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.testcontainers.utility.TestcontainersConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -15,8 +14,10 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.flyway.clean-disabled=false")
-@Import(TestcontainersConfiguration.class)
 class ProductRepositoryTest {
+
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:17");
 
     @Autowired
     private ProductRepository productRepository;
@@ -25,6 +26,16 @@ class ProductRepositoryTest {
     void setUp(@Autowired Flyway flyway) {
         flyway.clean();
         flyway.migrate();
+    }
+
+    @BeforeAll
+    static void start() {
+        postgreSQLContainer.start();
+    }
+
+    @AfterAll
+    static void tearDown() {
+        postgreSQLContainer.stop();
     }
 
     @Test
