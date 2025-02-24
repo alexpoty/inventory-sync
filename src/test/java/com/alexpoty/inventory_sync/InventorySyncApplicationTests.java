@@ -11,5 +11,4 @@ class InventorySyncApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
