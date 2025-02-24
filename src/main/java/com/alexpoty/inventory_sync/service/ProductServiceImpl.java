@@ -60,6 +60,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         log.info("Product Service - Searching by id when updating product");
         if (!productRepository.existsById(id)) {
