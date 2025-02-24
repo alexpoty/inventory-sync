@@ -160,6 +160,7 @@ class ProductServiceImplTest {
         when(productRepository.existsById(any(Long.class))).thenReturn(true);
         when(productRepository.save(any(Product.class))).thenReturn(product);
         when(productMapper.toProduct(any(ProductRequest.class))).thenReturn(given);
+        when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(given));
         when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
         ProductResponse actual = productService.updateProduct(1L, productRequest);
         // assert

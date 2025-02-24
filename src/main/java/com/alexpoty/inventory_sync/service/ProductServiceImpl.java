@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -65,6 +67,8 @@ public class ProductServiceImpl implements ProductService {
         }
         Product product = productMapper.toProduct(productRequest);
         product.setId(id);
+        product.setCreated_at(productRepository.findById(id).orElseThrow().getCreated_at());
+        product.setUpdated_at(Instant.now());
         log.info("Product Service - Saving Updated Product");
         return productMapper.toProductResponse(productRepository.save(product));
     }

@@ -10,7 +10,7 @@ public record ProductResponse(
         BigDecimal price,
         Integer quantity,
         Long warehouseId,
-        Instant createdAt,
-        Instant updatedAt
+        Instant created_at,
+        Instant updated_at
 ) {
 }
