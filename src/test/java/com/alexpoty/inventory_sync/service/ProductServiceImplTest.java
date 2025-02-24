@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -135,5 +136,72 @@ class ProductServiceImplTest {
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.empty());
         // assertThrow
         assertThrows(ProductNotFoundException.class, () -> productService.getProduct(1L));
+    }
+
+    @Test
+    public void should_update_product() {
+        ProductRequest productRequest = new ProductRequest(
+                "Test",
+                "Test",
+                new BigDecimal(123),
+                1,
+                1L
+        );
+        Product given  = Product.builder()
+                .name("Test")
+                .description("Test")
+                .price(new BigDecimal(123))
+                .quantity(1)
+                .warehouse(Warehouse.builder().id(1L).build())
+                .created_at(Instant.now())
+                .updated_at(Instant.now())
+                .build();
+        // when
+        when(productRepository.existsById(any(Long.class))).thenReturn(true);
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+        when(productMapper.toProduct(any(ProductRequest.class))).thenReturn(given);
+        when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(given));
+        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
+        ProductResponse actual = productService.updateProduct(1L, productRequest);
+        // assert
+        assertEquals(actual.name(), product.getName());
+        assertEquals(actual.id(), 1L);
+        assertEquals(actual.description(), product.getDescription());
+        verify(productRepository, times(1)).save(any(Product.class));
+        verify(productRepository, times(1)).existsById(any(Long.class));
+    }
+
+    @Test
+    public void should_throw_when_updated_product_not_found() {
+        // given
+        ProductRequest productRequest = new ProductRequest(
+                "Test",
+                "Test",
+                new BigDecimal(123),
+                1,
+                1L
+        );
+        // when
+        when(productRepository.existsById(any(Long.class))).thenReturn(false);
+        // assert
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(1L, productRequest));
+    }
+
+    @Test
+    public void should_delete_product() {
+        // when
+        Mockito.doNothing().when(productRepository).deleteById(any(Long.class));
+        when(productRepository.existsById(any(Long.class))).thenReturn(true);
+        productService.deleteProduct(1L);
+        // assert
+        verify(productRepository, times(1)).deleteById(any(Long.class));
+    }
+
+    @Test
+    public void should_throw_when_delete_product_not_found() {
+        // when
+        when(productRepository.existsById(any(Long.class))).thenReturn(false);
+        // assert
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(1L));
     }
 }
