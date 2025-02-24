@@ -9,4 +9,6 @@ public interface ProductService {
     Page<ProductResponse> getProducts(int page, int size);
     Page<ProductResponse> getProductsByWarehouseId(Long warehouseId, int page, int size);
     ProductResponse getProduct(Long id);
+    ProductResponse updateProduct(Long id, ProductRequest productRequest);
+    void deleteProduct(Long id);
 }

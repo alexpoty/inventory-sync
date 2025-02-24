@@ -56,4 +56,14 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product Service - Finished to get product by id");
         return productMapper.toProductResponse(product);
     }
+
+    @Override
+    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+
+    }
 }
