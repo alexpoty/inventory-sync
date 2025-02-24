@@ -59,11 +59,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
-        return null;
+        log.info("Product Service - Searching by id when updating product");
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product with id: " + id + " not found");
+        }
+        Product product = productMapper.toProduct(productRequest);
+        product.setId(id);
+        log.info("Product Service - Saving Updated Product");
+        return productMapper.toProductResponse(productRepository.save(product));
     }
 
     @Override
     public void deleteProduct(Long id) {
-
+        log.info("Product Service - Checking if product exist when deleting product");
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product with id: " + id + " not found");
+        }
+        productRepository.deleteById(id);
     }
 }

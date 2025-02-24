@@ -160,6 +160,7 @@ class ProductServiceImplTest {
         when(productRepository.existsById(any(Long.class))).thenReturn(true);
         when(productRepository.save(any(Product.class))).thenReturn(product);
         when(productMapper.toProduct(any(ProductRequest.class))).thenReturn(given);
+        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
         ProductResponse actual = productService.updateProduct(1L, productRequest);
         // assert
         assertEquals(actual.name(), product.getName());
@@ -198,7 +199,6 @@ class ProductServiceImplTest {
     @Test
     public void should_throw_when_delete_product_not_found() {
         // when
-        Mockito.doNothing().when(productRepository).deleteById(any(Long.class));
         when(productRepository.existsById(any(Long.class))).thenReturn(false);
         // assert
         assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(1L));

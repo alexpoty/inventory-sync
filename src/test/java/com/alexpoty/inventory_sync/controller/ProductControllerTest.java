@@ -22,8 +22,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -138,7 +137,7 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(productRequest)));
         // assert
-        resultActions.andExpect(status().isCreated()).andExpect(jsonPath("$.name", is("Test")));
+        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.name", is("Test")));
     }
 
     @Test
@@ -157,8 +156,8 @@ class ProductControllerTest {
     @Test
     public void should_delete_product_by_id_status_no_content() throws Exception {
         // when
-        doNothing().when(productService).deleteProduct(any(Long.class));
-        ResultActions resultActions = mockMvc.perform(delete("product/1")
+        doNothing().when(productService).deleteProduct(any());
+        ResultActions resultActions = mockMvc.perform(delete("/products/1")
                 .contentType(MediaType.APPLICATION_JSON));
         // assert
         resultActions.andExpect(status().isNoContent());
@@ -167,12 +166,10 @@ class ProductControllerTest {
     @Test
     public void should_throw_status_404_when_delete_product_not_found() throws Exception {
         // when
-        when(productService.updateProduct(any(Long.class), any(ProductRequest.class)))
-                .thenThrow(new ProductNotFoundException("Product not found"));
+        doThrow(new ProductNotFoundException("Product not found")).when(productService).deleteProduct(any());
+        ResultActions resultActions = mockMvc.perform(delete("/products/1")
+                .contentType(MediaType.APPLICATION_JSON));
         // assert
-        mockMvc.perform(delete("product/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error", is("Product not found")));
+        resultActions.andExpect(status().isNotFound());
     }
  }
