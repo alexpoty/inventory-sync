@@ -13,5 +13,4 @@ public record ProductRequest(
         BigDecimal price,
         Integer quantity,
         Long warehouseId
-) {
-}
+) {}

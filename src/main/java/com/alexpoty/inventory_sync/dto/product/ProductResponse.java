@@ -12,5 +12,4 @@ public record ProductResponse(
         Long warehouseId,
         Instant created_at,
         Instant updated_at
-) {
-}
+) {}
