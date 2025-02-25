@@ -107,7 +107,7 @@ class WarehouseControllerTest {
         WarehouseRequest warehouseRequest = createRequest();
         // when
         when(warehouseService.updateWarehouse(any(Long.class), any(WarehouseRequest.class))).thenReturn(createResponse());
-        ResultActions resultActions = mockMvc.perform(post("/warehouses/1")
+        ResultActions resultActions = mockMvc.perform(put("/warehouses/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(warehouseRequest)));
         // assert
@@ -123,7 +123,7 @@ class WarehouseControllerTest {
         //when
         when(warehouseService.updateWarehouse(any(Long.class), any(WarehouseRequest.class)))
                 .thenThrow(WarehouseNotFoundException.class);
-        ResultActions resultActions = mockMvc.perform(post("/warehouses/1")
+        ResultActions resultActions = mockMvc.perform(put("/warehouses/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(warehouseRequest)));
         // assert
