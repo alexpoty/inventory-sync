@@ -6,7 +6,7 @@ import com.alexpoty.inventory_sync.model.Warehouse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface WarehouseMapper {
 
     @Mapping(target = "products", ignore = true)

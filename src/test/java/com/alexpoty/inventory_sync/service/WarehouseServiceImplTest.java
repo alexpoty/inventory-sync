@@ -94,7 +94,6 @@ class WarehouseServiceImplTest {
     public void should_throw_when_updating() {
         WarehouseRequest warehouseRequest = createRequest();
         //when
-        when(warehouseRepository.save(any(Warehouse.class))).thenReturn(createWarehouse());
         when(warehouseRepository.findById(any(Long.class))).thenReturn(Optional.empty());
         // assert
         assertThrows(WarehouseNotFoundException.class, () -> warehouseService.updateWarehouse(1L, warehouseRequest));
