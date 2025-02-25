@@ -1,5 +1,6 @@
 package com.alexpoty.inventory_sync.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Product {
     private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "warehouses_id")
+    @JsonBackReference
     private Warehouse warehouse;
     private Instant created_at;
     private Instant updated_at;
