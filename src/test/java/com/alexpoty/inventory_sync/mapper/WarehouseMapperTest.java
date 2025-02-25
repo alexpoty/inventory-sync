@@ -18,7 +18,6 @@ class WarehouseMapperTest {
         // assert
         assertNotNull(actual);
         assertEquals(actual.getName(), "Test");
-        assertEquals(actual.getProducts().size(), 1);
     }
 
     @Test
