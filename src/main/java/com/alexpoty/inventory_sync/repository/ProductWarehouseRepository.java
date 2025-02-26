@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface ProductWarehouseRepository extends JpaRepository<ProductWarehouse, Long> {
 
     Optional<ProductWarehouse> findByWarehouseIdAndProductId(long warehouseId, long productId);
-    boolean existsByWarehouseIdAndProductId(long warehouseId, long productId);
     List<ProductWarehouse> findAllByWarehouseId(long warehouseId);
     List<ProductWarehouse> findAllByProductId(long productId);
 }

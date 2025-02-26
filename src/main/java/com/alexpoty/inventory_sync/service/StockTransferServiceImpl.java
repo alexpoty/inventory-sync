@@ -34,6 +34,7 @@ public class StockTransferServiceImpl implements StockTransferService {
     public StockTransferResponse addStock(StockTransferRequest request) {
         log.info("Adding {} units of product {} to warehouse {}",
                 request.quantity(), request.productId(), request.toWarehouseId());
+
         ProductWarehouse productWarehouse = ProductWarehouse.builder()
                 .product(productRepository.findById(request.productId()).orElseThrow(
                         () -> new ProductNotFoundException("Product Not Found")
@@ -57,11 +58,13 @@ public class StockTransferServiceImpl implements StockTransferService {
     public List<StockTransferResponse> transferStock(StockTransferRequest request) {
         log.info("Transferring {} units of product {} from warehouse {} to warehouse {}",
                 request.quantity(), request.productId(), request.fromWarehouseId(), request.toWarehouseId());
+
         ProductWarehouse productWarehouse = transferRepository
                 .findByWarehouseIdAndProductId(request.fromWarehouseId(), request.productId()).orElseThrow();
         if (productWarehouse.getQuantity() < request.quantity()) {
             throw new LowStockException("Low Stock Available");
         }
+
         if (productWarehouse.getQuantity().equals(request.quantity())) {
             Warehouse warehouse = warehouseRepository.findById(request.toWarehouseId()).orElseThrow(
                     () -> new WarehouseNotFoundException("Warehouse Not Found")
@@ -70,6 +73,7 @@ public class StockTransferServiceImpl implements StockTransferService {
             transferRepository.save(productWarehouse);
             return List.of(stockTransferMapper.toResponse(productWarehouse));
         }
+
         StockTransferResponse stockTransferResponse = addStock(request);
         productWarehouse.setQuantity(productWarehouse.getQuantity() - request.quantity());
         transferRepository.save(productWarehouse);

@@ -11,4 +11,5 @@ public record ProductRequest(
         String description,
         @Positive
         BigDecimal price
-) {}
+) {
+}

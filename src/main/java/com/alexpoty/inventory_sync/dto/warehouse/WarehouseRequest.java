@@ -6,4 +6,5 @@ public record WarehouseRequest(
         @NotBlank
         String name,
         String location
-) {}
+) {
+}

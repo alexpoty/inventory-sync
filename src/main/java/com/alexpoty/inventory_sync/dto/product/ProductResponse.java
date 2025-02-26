@@ -10,4 +10,5 @@ public record ProductResponse(
         BigDecimal price,
         Instant created_at,
         Instant updated_at
-) {}
+) {
+}
