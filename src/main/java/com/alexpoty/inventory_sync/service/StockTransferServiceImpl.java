@@ -15,6 +15,8 @@ import com.alexpoty.inventory_sync.repository.WarehouseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public class StockTransferServiceImpl implements StockTransferService {
     private final WarehouseRepository warehouseRepository;
     private final StockTransferMapper stockTransferMapper = new StockTransferMapperImpl();
 
+    @CacheEvict(value = "transferCache", key = "'allTransfers'")
     @Override
     @Transactional
     public StockTransferResponse addStock(StockTransferRequest request) {
@@ -53,6 +56,7 @@ public class StockTransferServiceImpl implements StockTransferService {
         );
     }
 
+    @CacheEvict(value = "transferCache", key = "'allTransfers'")
     @Override
     @Transactional
     public List<StockTransferResponse> transferStock(StockTransferRequest request) {
@@ -80,6 +84,7 @@ public class StockTransferServiceImpl implements StockTransferService {
         return List.of(stockTransferResponse, stockTransferMapper.toResponse(productWarehouse));
     }
 
+    @Cacheable(value = "transferCache", key = "'allTransfers'")
     @Override
     public List<StockTransferResponse> getProductsByWarehouseId(Long warehouseId) {
         log.info("Fetching products for warehouse {}", warehouseId);
@@ -88,6 +93,7 @@ public class StockTransferServiceImpl implements StockTransferService {
                 .toList();
     }
 
+    @Cacheable(value = "transferCache", key = "'allTransfers'")
     @Override
     public List<StockTransferResponse> getWarehousesByProductId(Long productId) {
         log.info("Fetching warehouses for product {}", productId);
