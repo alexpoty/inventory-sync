@@ -12,6 +12,6 @@ public interface ProductWarehouseRepository extends JpaRepository<ProductWarehou
 
     Optional<ProductWarehouse> findByWarehouseIdAndProductId(long warehouseId, long productId);
     boolean existsByWarehouseIdAndProductId(long warehouseId, long productId);
-    List<ProductWarehouse> findByWarehouseId(long warehouseId);
-    List<ProductWarehouse> findByProductId(long productId);
+    List<ProductWarehouse> findAllByWarehouseId(long warehouseId);
+    List<ProductWarehouse> findAllByProductId(long productId);
 }
