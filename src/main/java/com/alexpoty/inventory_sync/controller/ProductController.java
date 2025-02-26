@@ -38,15 +38,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(page, size));
     }
 
-    @GetMapping("/warehouse")
-    public ResponseEntity<Page<ProductResponse>> getProductsByWarehouseId(@RequestParam Long warehouseId,
-                                                                          @RequestParam int page,
-                                                                          @RequestParam int size) {
-        log.info("Product Controller - Get Products By Warehouse Id");
-        return ResponseEntity.status(HttpStatus.OK).body(productService
-                .getProductsByWarehouseId(warehouseId, page, size));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         log.info("Product Controller - Update Product");

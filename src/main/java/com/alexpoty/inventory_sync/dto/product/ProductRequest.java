@@ -10,7 +10,6 @@ public record ProductRequest(
         String name,
         String description,
         @Positive
-        BigDecimal price,
-        Integer quantity,
-        Long warehouseId
-) {}
+        BigDecimal price
+) {
+}

@@ -42,15 +42,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponse> getProductsByWarehouseId(Long warehouseId, int page, int size) {
-        log.info("Product Service - Starting to get products by warehouse id");
-        Page<Product> productPage = productRepository.findAllByWarehouseId(warehouseId, PageRequest.of(page, size));
-        Page<ProductResponse> responses = productPage.map(productMapper::toProductResponse);
-        log.info("Product Service - Finished to get products by warehouse id");
-        return responses;
-    }
-
-    @Override
     public ProductResponse getProduct(Long id) {
         log.info("Product Service - Starting to get product by id");
         Product product = productRepository.findById(id).orElseThrow(

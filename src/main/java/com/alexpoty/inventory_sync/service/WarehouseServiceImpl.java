@@ -55,7 +55,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         );
         Warehouse updated = warehouseMapper.toWarehouse(warehouseRequest);
         updated.setId(id);
-        updated.setProducts(old.getProducts());
         log.info("Warehouse Service - Update");
         warehouseRepository.save(updated);
         return warehouseMapper.toWarehouseResponse(updated);

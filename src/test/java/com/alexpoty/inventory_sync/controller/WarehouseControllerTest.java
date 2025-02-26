@@ -3,7 +3,6 @@ package com.alexpoty.inventory_sync.controller;
 import com.alexpoty.inventory_sync.dto.warehouse.WarehouseRequest;
 import com.alexpoty.inventory_sync.dto.warehouse.WarehouseResponse;
 import com.alexpoty.inventory_sync.exception.warehouse.WarehouseNotFoundException;
-import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.service.WarehouseService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -161,15 +158,7 @@ class WarehouseControllerTest {
         return new WarehouseResponse(
                 1L,
                 "Test",
-                "Test",
-                List.of(Product.builder()
-                        .name("Test")
-                        .description("Test")
-                        .price(new BigDecimal(123))
-                        .quantity(1)
-                        .created_at(Instant.now())
-                        .updated_at(Instant.now())
-                        .build())
+                "Test"
         );
     }
 

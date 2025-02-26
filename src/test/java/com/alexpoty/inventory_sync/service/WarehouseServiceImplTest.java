@@ -3,7 +3,6 @@ package com.alexpoty.inventory_sync.service;
 import com.alexpoty.inventory_sync.dto.warehouse.WarehouseRequest;
 import com.alexpoty.inventory_sync.dto.warehouse.WarehouseResponse;
 import com.alexpoty.inventory_sync.exception.warehouse.WarehouseNotFoundException;
-import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.WarehouseRepository;
 import org.junit.jupiter.api.Test;
@@ -12,8 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,7 +83,6 @@ class WarehouseServiceImplTest {
         // assert
         assertNotNull(response);
         assertEquals(warehouseRequest.name(), response.name());
-        assertEquals(1, response.products().size());
         verify(warehouseRepository, times(1)).save(any(Warehouse.class));
     }
 
@@ -122,14 +118,6 @@ class WarehouseServiceImplTest {
                 .id(1L)
                 .name("Test")
                 .location("Test")
-                .products(List.of(Product.builder()
-                        .name("Test")
-                        .description("Test")
-                        .price(new BigDecimal(123))
-                        .quantity(1)
-                        .created_at(Instant.now())
-                        .updated_at(Instant.now())
-                        .build()))
                 .build();
     }
 

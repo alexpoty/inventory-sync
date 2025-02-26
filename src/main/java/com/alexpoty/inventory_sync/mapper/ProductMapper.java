@@ -10,11 +10,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-    @Mapping(target = "warehouseId", source = "warehouse")
     ProductResponse toProductResponse(Product product);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "warehouse", source = "warehouseId")
     @Mapping(target = "updated_at", expression = "java(java.time.Instant.now())")
     @Mapping(target = "created_at", expression = "java(java.time.Instant.now())")
     Product toProduct(ProductRequest productRequest);
