@@ -13,3 +13,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    enabled: true
+  group-configs:
+    - group: "Warehouse API"
+      paths-to-match: "/warehouses/**"
+    - group: "Stock Transfer API"
+      paths-to-match: "/transfer/**"
+    - group: "Product API"
+      paths-to-match: "/products/**"
