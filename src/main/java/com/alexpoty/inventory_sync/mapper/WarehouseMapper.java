@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface WarehouseMapper {
 
-    @Mapping(target = "products", ignore = true)
     @Mapping(target = "id", ignore = true)
     Warehouse toWarehouse(WarehouseRequest warehouseRequest);
     WarehouseResponse toWarehouseResponse(Warehouse warehouse);

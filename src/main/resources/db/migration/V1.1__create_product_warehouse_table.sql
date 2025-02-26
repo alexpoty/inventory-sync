@@ -4,3 +4,7 @@ CREATE TABLE product_warehouse(
     warehouse_id BIGINT REFERENCES warehouses (id),
     quantity INT NOT NULL
 );
+
+ALTER TABLE IF EXISTS products
+DROP warehouses_id,
+DROP quantity;

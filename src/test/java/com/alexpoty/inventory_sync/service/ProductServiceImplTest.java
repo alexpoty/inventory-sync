@@ -5,7 +5,6 @@ import com.alexpoty.inventory_sync.dto.product.ProductResponse;
 import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
-import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,8 +46,6 @@ class ProductServiceImplTest {
                 .name("Test")
                 .description("Test")
                 .price(new BigDecimal(123))
-                .quantity(1)
-                .warehouse(Warehouse.builder().id(1L).build())
                 .created_at(Instant.now())
                 .updated_at(Instant.now())
                 .build();
@@ -57,8 +54,6 @@ class ProductServiceImplTest {
                 "Test",
                 "Test",
                 new BigDecimal(123),
-                1,
-                1L,
                 Instant.now(),
                 Instant.now()
         );
@@ -70,9 +65,7 @@ class ProductServiceImplTest {
         ProductRequest productRequest = new ProductRequest(
                 "Test",
                 "Test",
-                new BigDecimal(123),
-                1,
-                1L
+                new BigDecimal(123)
         );
         // when
         when(productRepository.save(any(Product.class))).thenReturn(this.product);
@@ -102,24 +95,6 @@ class ProductServiceImplTest {
     }
 
     @Test
-    public void should_find_products_by_warehouse() {
-        // given
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Product> productPage = new PageImpl<>(List.of(product), pageable, 1);
-        // when
-        when(productRepository.findAllByWarehouseId(any(Long.class), any(Pageable.class))).thenReturn(productPage);
-        when(productMapper.toProductResponse(any(Product.class))).thenReturn(productResponse);
-        Page<ProductResponse> actual = productService.getProductsByWarehouseId(1L, 0, 10);
-        // assert
-        assertEquals(productPage.getTotalPages(), actual.getTotalPages());
-        assertEquals(productPage.getTotalElements(), actual.getTotalElements());
-        ProductResponse actualProduct = actual.getContent().getFirst();
-        assertEquals(actualProduct.name(), product.getName());
-        assertEquals(actualProduct.description(), product.getDescription());
-        verify(productRepository, times(1)).findAllByWarehouseId(any(Long.class), any(Pageable.class));
-    }
-
-    @Test
     public void should_find_product_by_id() {
         // when
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
@@ -143,16 +118,12 @@ class ProductServiceImplTest {
         ProductRequest productRequest = new ProductRequest(
                 "Test",
                 "Test",
-                new BigDecimal(123),
-                1,
-                1L
+                new BigDecimal(123)
         );
         Product given  = Product.builder()
                 .name("Test")
                 .description("Test")
                 .price(new BigDecimal(123))
-                .quantity(1)
-                .warehouse(Warehouse.builder().id(1L).build())
                 .created_at(Instant.now())
                 .updated_at(Instant.now())
                 .build();
@@ -177,9 +148,7 @@ class ProductServiceImplTest {
         ProductRequest productRequest = new ProductRequest(
                 "Test",
                 "Test",
-                new BigDecimal(123),
-                1,
-                1L
+                new BigDecimal(123)
         );
         // when
         when(productRepository.existsById(any(Long.class))).thenReturn(false);
