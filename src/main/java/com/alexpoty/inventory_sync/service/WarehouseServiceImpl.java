@@ -10,6 +10,9 @@ import com.alexpoty.inventory_sync.repository.WarehouseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final WarehouseMapper warehouseMapper = new WarehouseMapperImpl();
 
+    @Cacheable(value = "warehouseCache", key = "'allWarehouses'")
     @Override
     public List<WarehouseResponse> getWarehouses() {
         log.info("Warehouse Service - FindAll");
@@ -29,6 +33,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return warehouses.stream().map(warehouseMapper::toWarehouseResponse).toList();
     }
 
+    @Cacheable(value = "warehouseCache", key = "#id")
     @Override
     public WarehouseResponse getWarehouse(Long id) {
         log.info("Warehouse Service - FindById");
@@ -38,6 +43,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return warehouseMapper.toWarehouseResponse(warehouse);
     }
 
+    @CacheEvict(value = "warehouseCache", key = "'allWarehouses'")
     @Override
     @Transactional
     public WarehouseResponse addWarehouse(WarehouseRequest warehouseRequest) {
@@ -46,6 +52,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return warehouseMapper.toWarehouseResponse(warehouse);
     }
 
+    @CachePut(value = "warehouseCache", key = "#id")
     @Override
     @Transactional
     public WarehouseResponse updateWarehouse(Long id, WarehouseRequest warehouseRequest) {
@@ -60,6 +67,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return warehouseMapper.toWarehouseResponse(updated);
     }
 
+    @CacheEvict(value = "warehouseCache", key = "#id")
     @Override
     public void deleteWarehouse(Long id) {
         log.info("Warehouse Service - Find By Id when deleting");

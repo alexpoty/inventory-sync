@@ -9,6 +9,9 @@ import com.alexpoty.inventory_sync.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
+    @CacheEvict(value = "productCache", key = "'allProducts'")
     @Override
     @Transactional
     public ProductResponse createProduct(ProductRequest productRequest) {
@@ -32,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(product);
     }
 
+    @Cacheable(value = "productCache", key = "'allProducts'")
     @Override
     public Page<ProductResponse> getProducts(int page, int size) {
         log.info("Product Service - Starting to get products");
@@ -41,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         return responses;
     }
 
+    @Cacheable(value = "productCache", key = "#id")
     @Override
     public ProductResponse getProduct(Long id) {
         log.info("Product Service - Starting to get product by id");
@@ -50,6 +56,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(product);
     }
 
+    @CachePut(value = "productCache", key = "#id")
     @Override
     @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
@@ -65,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
+    @CacheEvict(value = "productCache", key = "#id")
     @Override
     public void deleteProduct(Long id) {
         log.info("Product Service - Checking if product exist when deleting product");
