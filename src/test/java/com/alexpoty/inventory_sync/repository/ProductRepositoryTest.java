@@ -45,7 +45,6 @@ class ProductRepositoryTest {
                 .name("Test")
                 .description("Test")
                 .price(new BigDecimal(123))
-                .quantity(1)
                 .created_at(Instant.now())
                 .updated_at(Instant.now())
                 .build();

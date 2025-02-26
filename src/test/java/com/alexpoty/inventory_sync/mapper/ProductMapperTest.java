@@ -22,7 +22,6 @@ class ProductMapperTest {
                 .name("Test")
                 .description("Test")
                 .price(new BigDecimal(123))
-                .quantity(1)
                 .created_at(Instant.now())
                 .updated_at(Instant.now())
                 .build();
@@ -38,15 +37,12 @@ class ProductMapperTest {
         ProductRequest productRequest = new ProductRequest(
                 "Test",
                 "Test",
-                new BigDecimal(123),
-                1,
-                1L
+                new BigDecimal(123)
         );
         // when
         Product actual = productMapper.toProduct(productRequest);
         // assert
         assertNotNull(actual);
         assertEquals(productRequest.name(), actual.getName());
-        assertEquals(productRequest.warehouseId(), actual.getWarehouse().getId());
     }
 }

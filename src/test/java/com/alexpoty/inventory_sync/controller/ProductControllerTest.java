@@ -47,16 +47,13 @@ class ProductControllerTest {
                 "Test",
                 "Test",
                 new BigDecimal(123),
-                1,
-                1L,
                 Instant.now(),
                 Instant.now()
         );
         productRequest = new ProductRequest("Test",
                 "Test",
-                new BigDecimal(123),
-                1,
-                1L);
+                new BigDecimal(123)
+        );
     }
 
     @Test
@@ -76,9 +73,8 @@ class ProductControllerTest {
         // given
         ProductRequest badRequest = new ProductRequest("",
                 "Test",
-                new BigDecimal(123),
-                1,
-                1L);
+                new BigDecimal(123)
+        );
         // when
         when(productService.createProduct(any(ProductRequest.class))).thenReturn(productResponse);
         ResultActions resultActions = mockMvc.perform(post("/products")
@@ -113,17 +109,6 @@ class ProductControllerTest {
         // when
         when(productService.getProducts(any(Integer.class), any(Integer.class))).thenReturn(new PageImpl<>(List.of(productResponse)));
         ResultActions resultActions = mockMvc.perform(get("/products?page=1&size=2")
-                .contentType(MediaType.APPLICATION_JSON));
-        // assert
-        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.content[0].name", is("Test")));
-    }
-
-    @Test
-    public void should_get_products_by_warehouseId_status_200() throws Exception {
-        // when
-        when(productService.getProductsByWarehouseId(any(Long.class), any(Integer.class), any(Integer.class)))
-                .thenReturn(new PageImpl<>(List.of(productResponse)));
-        ResultActions resultActions = mockMvc.perform(get("/products/warehouse?warehouseId=1&page=2&size=2")
                 .contentType(MediaType.APPLICATION_JSON));
         // assert
         resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.content[0].name", is("Test")));

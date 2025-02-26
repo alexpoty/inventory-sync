@@ -21,10 +21,6 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private Integer quantity;
-    @ManyToOne
-    @JoinColumn(name = "warehouses_id")
-    private Warehouse warehouse;
     private Instant created_at;
     private Instant updated_at;
 }
