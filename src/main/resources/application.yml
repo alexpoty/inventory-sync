@@ -6,6 +6,24 @@ spring:
     password: root
     url: jdbc:postgresql://localhost:5432/inventory-sync
     driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     hibernate:
       ddl-auto: none
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    enabled: true
+  group-configs:
+    - group: "Warehouse API"
+      paths-to-match: "/warehouses/**"
+    - group: "Stock Transfer API"
+      paths-to-match: "/transfer/**"
+    - group: "Product API"
+      paths-to-match: "/products/**"
