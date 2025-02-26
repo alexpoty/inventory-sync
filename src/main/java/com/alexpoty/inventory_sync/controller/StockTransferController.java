@@ -3,6 +3,7 @@ package com.alexpoty.inventory_sync.controller;
 import com.alexpoty.inventory_sync.dto.transfer.StockTransferRequest;
 import com.alexpoty.inventory_sync.dto.transfer.StockTransferResponse;
 import com.alexpoty.inventory_sync.service.StockTransferService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,12 @@ public class StockTransferController {
     }
 
     @PostMapping
-    public ResponseEntity<StockTransferResponse> addStock(@RequestBody StockTransferRequest request) {
+    public ResponseEntity<StockTransferResponse> addStock(@Valid @RequestBody StockTransferRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(stockTransferService.addStock(request));
     }
 
     @PutMapping
-    public ResponseEntity<List<StockTransferResponse>> transfer(@RequestBody StockTransferRequest request) {
+    public ResponseEntity<List<StockTransferResponse>> transfer(@Valid @RequestBody StockTransferRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(stockTransferService.transferStock(request));
     }
 }
