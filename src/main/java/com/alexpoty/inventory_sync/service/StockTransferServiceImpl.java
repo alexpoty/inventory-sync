@@ -72,7 +72,6 @@ public class StockTransferServiceImpl implements StockTransferService {
         }
         StockTransferResponse stockTransferResponse = addStock(request);
         productWarehouse.setQuantity(productWarehouse.getQuantity() - request.quantity());
-        log.info("StockTransferService::transferStock - transferRepository::save");
         transferRepository.save(productWarehouse);
         return List.of(stockTransferResponse, stockTransferMapper.toResponse(productWarehouse));
     }
