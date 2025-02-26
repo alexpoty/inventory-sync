@@ -1,9 +1,15 @@
 package com.alexpoty.inventory_sync.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "product_warehouse")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ProductWarehouse {
 
     @Id
@@ -15,4 +21,5 @@ public class ProductWarehouse {
     @ManyToOne
     @JoinColumn(name = "warehouse_id", nullable = false)
     private Warehouse warehouse;
+    private Integer quantity;
 }
