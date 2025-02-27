@@ -5,6 +5,7 @@ import com.alexpoty.inventory_sync.dto.warehouse.WarehouseResponse;
 import com.alexpoty.inventory_sync.exception.warehouse.WarehouseNotFoundException;
 import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.WarehouseRepository;
+import com.alexpoty.inventory_sync.service.impl.WarehouseServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

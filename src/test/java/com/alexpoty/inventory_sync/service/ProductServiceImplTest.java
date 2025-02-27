@@ -6,6 +6,7 @@ import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
+import com.alexpoty.inventory_sync.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
