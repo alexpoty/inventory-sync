@@ -1,4 +1,4 @@
-package com.alexpoty.inventory_sync.service;
+package com.alexpoty.inventory_sync.service.impl;
 
 import com.alexpoty.inventory_sync.dto.product.ProductRequest;
 import com.alexpoty.inventory_sync.dto.product.ProductResponse;
@@ -6,6 +6,7 @@ import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.mapper.ProductMapper;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
+import com.alexpoty.inventory_sync.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

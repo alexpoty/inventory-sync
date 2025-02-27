@@ -11,6 +11,7 @@ import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
 import com.alexpoty.inventory_sync.repository.ProductWarehouseRepository;
 import com.alexpoty.inventory_sync.repository.WarehouseRepository;
+import com.alexpoty.inventory_sync.service.impl.StockTransferServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

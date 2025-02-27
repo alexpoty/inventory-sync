@@ -1,4 +1,4 @@
-package com.alexpoty.inventory_sync.service;
+package com.alexpoty.inventory_sync.service.impl;
 
 import com.alexpoty.inventory_sync.dto.transfer.StockTransferRequest;
 import com.alexpoty.inventory_sync.dto.transfer.StockTransferResponse;
@@ -12,6 +12,7 @@ import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.ProductRepository;
 import com.alexpoty.inventory_sync.repository.ProductWarehouseRepository;
 import com.alexpoty.inventory_sync.repository.WarehouseRepository;
+import com.alexpoty.inventory_sync.service.StockTransferService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
