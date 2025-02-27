@@ -60,8 +60,9 @@ class SupplierControllerTest {
     public void should_return_status_404_when_updating_unknown_supplier() throws Exception {
         // when
         doThrow(SupplierNotFoundException.class).when(service).updateSupplier(anyLong(), any(SupplierRequest.class));
-        ResultActions resultActions = mockMvc.perform(get("/supplier/1")
-                .contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mockMvc.perform(put("/supplier/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(createSupplierRequest())));
         // assert
         resultActions.andExpect(status().isNotFound());
     }

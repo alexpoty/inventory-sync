@@ -97,6 +97,7 @@ class SupplierServiceImplTest {
     public void should_delete_a_supplier() {
         // when
         doNothing().when(repository).deleteById(anyLong());
+        when(repository.existsById(anyLong())).thenReturn(true);
         service.deleteSupplier(1L);
         // assert
         verify(repository, times(1)).deleteById(anyLong());
@@ -120,9 +121,5 @@ class SupplierServiceImplTest {
 
     private SupplierRequest createSupplierRequest() {
         return new SupplierRequest("Test", "Test");
-    }
-
-    private SupplierResponse createSupplierResponse() {
-        return new SupplierResponse(1L, "Test", "Test");
     }
 }
