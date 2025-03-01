@@ -1,4 +1,9 @@
 spring:
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
   application:
     name: inventory-sync
   datasource:
@@ -27,3 +32,5 @@ springdoc:
       paths-to-match: "/transfer/**"
     - group: "Product API"
       paths-to-match: "/products/**"
+    - group: "Supplier API"
+      paths-to-match: "/supplier/**"

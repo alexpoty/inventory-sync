@@ -1,4 +1,4 @@
-package com.alexpoty.inventory_sync.service;
+package com.alexpoty.inventory_sync.service.impl;
 
 import com.alexpoty.inventory_sync.dto.warehouse.WarehouseRequest;
 import com.alexpoty.inventory_sync.dto.warehouse.WarehouseResponse;
@@ -7,6 +7,7 @@ import com.alexpoty.inventory_sync.mapper.WarehouseMapper;
 import com.alexpoty.inventory_sync.mapper.WarehouseMapperImpl;
 import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.repository.WarehouseRepository;
+import com.alexpoty.inventory_sync.service.WarehouseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
