@@ -75,11 +75,21 @@ public class StockTransferController {
         return ResponseEntity.status(HttpStatus.CREATED).body(stockTransferService.transferStock(request));
     }
 
+    @Operation(summary = "Get stock by ID", description = "Fetches stock transfer details by a given stock ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Stock transfer details retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Stock not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<StockTransferResponse> getStockById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(stockTransferService.getStock(id));
     }
 
+    @Operation(summary = "Add quantity to stock", description = "Increases the quantity of an existing stock transfer by the given amount.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Quantity added successfully"),
+            @ApiResponse(responseCode = "404", description = "Stock not found")
+    })
     @PutMapping("/quantity")
     public ResponseEntity<StockTransferResponse> addQuantity(@RequestParam Integer quantity, @RequestParam Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(stockTransferService.addQuantity(quantity, id));
