@@ -74,4 +74,14 @@ public class StockTransferController {
     public ResponseEntity<List<StockTransferResponse>> transfer(@Valid @RequestBody StockTransferRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(stockTransferService.transferStock(request));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StockTransferResponse> getStockById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(stockTransferService.getStock(id));
+    }
+
+    @PutMapping("/quantity")
+    public ResponseEntity<StockTransferResponse> addQuantity(@RequestParam Integer quantity, @RequestParam Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(stockTransferService.addQuantity(quantity, id));
+    }
 }

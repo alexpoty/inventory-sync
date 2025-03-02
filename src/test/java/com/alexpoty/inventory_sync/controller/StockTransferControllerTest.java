@@ -2,6 +2,7 @@ package com.alexpoty.inventory_sync.controller;
 
 import com.alexpoty.inventory_sync.dto.transfer.StockTransferRequest;
 import com.alexpoty.inventory_sync.dto.transfer.StockTransferResponse;
+import com.alexpoty.inventory_sync.exception.product.ProductNotFoundException;
 import com.alexpoty.inventory_sync.model.Product;
 import com.alexpoty.inventory_sync.model.Warehouse;
 import com.alexpoty.inventory_sync.service.StockTransferService;
@@ -20,7 +21,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,6 +84,47 @@ class StockTransferControllerTest {
         // assert
         resultActions.andExpect(status().isCreated())
                 .andExpect(jsonPath("$[0].id", CoreMatchers.is(1)));
+    }
+
+    @Test
+    public void getStockById_ShouldReturnStock() throws Exception {
+        // when
+        when(stockTransferService.getStock(anyLong())).thenReturn(createResponse());
+        ResultActions resultActions = mockMvc.perform(get("/transfer/1")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.id", CoreMatchers.is(1)))
+                .andExpect(jsonPath("$.quantity", CoreMatchers.is(100)));
+    }
+
+    @Test
+    public void getStockById_ShouldReturnStatusNotFound() throws Exception {
+        // when
+        when(stockTransferService.getStock(anyLong())).thenThrow(ProductNotFoundException.class);
+        ResultActions resultActions = mockMvc.perform(get("/transfer/1")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void addQuantity_ShouldAddQuantityAndReturnResponse() throws Exception {
+        // when
+        when(stockTransferService.addQuantity(any(Integer.class), any(Long.class))).thenReturn(createResponse());
+        ResultActions resultActions = mockMvc.perform(put("/transfer/quantity?quantity=100&id=1")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.quantity", CoreMatchers.is(100)));
+    }
+
+    @Test
+    public void addQuantity_ShouldReturnStatusNotFound() throws Exception {
+        // when
+        when(stockTransferService.addQuantity(any(Integer.class), anyLong())).thenThrow(ProductNotFoundException.class);
+        ResultActions resultActions = mockMvc.perform(put("/transfer/quantity?quantity=100&id=1")
+                .contentType(MediaType.APPLICATION_JSON));
+        // assert
+        resultActions.andExpect(status().isNotFound());
     }
 
     private StockTransferResponse createResponse() {
