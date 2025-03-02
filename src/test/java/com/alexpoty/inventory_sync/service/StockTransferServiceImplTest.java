@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -112,5 +113,42 @@ class StockTransferServiceImplTest {
         when(transferRepository.findByWarehouseIdAndProductId(1L, 1L)).thenReturn(Optional.of(productWarehouse));
 
         assertThrows(LowStockException.class, () -> stockTransferService.transferStock(request));
+    }
+
+    @Test
+    public void getStock_ShouldReturnStockSuccessfully() {
+        // when
+        when(transferRepository.findById(anyLong())).thenReturn(Optional.of(productWarehouse));
+        StockTransferResponse actual = stockTransferService.getStock(1L);
+        // assert
+        assertNotNull(actual);
+        assertEquals(1L, actual.id());
+        assertEquals(10, actual.quantity());
+    }
+
+    @Test
+    public void getStock_ShouldThrowProductNotFoundException() {
+        // when
+        when(transferRepository.findById(anyLong())).thenReturn(Optional.empty());
+        // assert
+        assertThrows(ProductNotFoundException.class, () -> stockTransferService.getStock(1L));
+    }
+
+    @Test
+    public void addQuantity_ShouldAddQuantitySuccessfully() {
+        // when
+        when(transferRepository.findById(anyLong())).thenReturn(Optional.of(productWarehouse));
+        when(transferRepository.save(any(ProductWarehouse.class))).thenReturn(productWarehouse);
+        StockTransferResponse actual = stockTransferService.addQuantity(20, 1L);
+        // assert
+        assertNotNull(actual);
+        assertEquals(30, actual.quantity());
+    }
+
+    @Test
+    public void addQuantity_ShouldThrowProductNotFoundException() {
+        when(transferRepository.findById(anyLong())).thenReturn(Optional.empty());
+        // assert
+        assertThrows(ProductNotFoundException.class, () -> stockTransferService.addQuantity(20, 1L));
     }
 }

@@ -20,8 +20,7 @@ public class StockReplenishJob {
     private final ProductWarehouseRepository productWarehouseRepository;
     private final MailSenderService mailSenderService;
 
-//    @Scheduled(cron = "0 0 09 * * MON-FRI")
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 09 * * MON-FRI")
     @Async
     public void checkStockForLowQuantity() {
         log.info("Checking stock for low quantity");

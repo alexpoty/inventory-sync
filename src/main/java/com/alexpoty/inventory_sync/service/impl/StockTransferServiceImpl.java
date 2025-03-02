@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -101,5 +102,28 @@ public class StockTransferServiceImpl implements StockTransferService {
         return transferRepository.findAllByProductId(productId).stream()
                 .map(stockTransferMapper::toResponse)
                 .toList();
+    }
+
+    @Cacheable(value = "transferCache", key = "#id")
+    @Override
+    public StockTransferResponse getStock(Long id) {
+        log.info("Fetching stock for id {}", id);
+        ProductWarehouse productWarehouse = transferRepository.findById(id).orElseThrow(
+                () -> new ProductNotFoundException("Product warehouse dont found")
+        );
+        return stockTransferMapper.toResponse(productWarehouse);
+    }
+
+    @Transactional
+    @CachePut(value = "transferCache", key = "#id")
+    @Override
+    public StockTransferResponse addQuantity(Integer quantity, Long id) {
+        log.info("Adding quantity {} with id {}", quantity, id);
+        ProductWarehouse productWarehouse = transferRepository.findById(id).orElseThrow(
+                () -> new ProductNotFoundException("Product warehouse dont found")
+        );
+        productWarehouse.setQuantity(productWarehouse.getQuantity() + quantity);
+        transferRepository.save(productWarehouse);
+        return stockTransferMapper.toResponse(productWarehouse);
     }
 }

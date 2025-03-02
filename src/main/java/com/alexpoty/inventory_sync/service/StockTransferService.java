@@ -10,4 +10,6 @@ public interface StockTransferService {
     List<StockTransferResponse> transferStock(StockTransferRequest request);
     List<StockTransferResponse> getProductsByWarehouseId(Long warehouseId);
     List<StockTransferResponse> getWarehousesByProductId(Long productId);
+    StockTransferResponse getStock(Long id);
+    StockTransferResponse addQuantity(Integer quantity, Long id);
 }
