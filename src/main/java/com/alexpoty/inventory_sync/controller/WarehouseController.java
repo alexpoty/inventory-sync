@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class WarehouseController {
             @ApiResponse(responseCode = "201", description = "Warehouse created successfully")
     })
     @PostMapping
+    @PreAuthorize("hasRole('Admin')")
     ResponseEntity<WarehouseResponse> addWarehouse(@Valid @RequestBody WarehouseRequest warehouseRequest) {
         log.info("Warehouse Controller - addWarehouse");
         return ResponseEntity.status(HttpStatus.CREATED).body(warehouseService.addWarehouse(warehouseRequest));
@@ -62,6 +64,7 @@ public class WarehouseController {
             @ApiResponse(responseCode = "404", description = "Warehouse not found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     ResponseEntity<WarehouseResponse> updateWarehouse(@PathVariable Long id, @RequestBody WarehouseRequest warehouseRequest) {
         log.info("Warehouse Controller - updateWarehouse");
         return ResponseEntity.status(HttpStatus.OK).body(warehouseService.updateWarehouse(id, warehouseRequest));
@@ -73,6 +76,7 @@ public class WarehouseController {
             @ApiResponse(responseCode = "404", description = "Warehouse not found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     ResponseEntity<Void> deleteWarehouse(@PathVariable Long id) {
         log.info("Warehouse Controller - deleteWarehouse");
         warehouseService.deleteWarehouse(id);
