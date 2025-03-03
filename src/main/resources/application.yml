@@ -1,4 +1,10 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/inventory-sync
+          jwk-set-uri: http://localhost:8081/realms/inventory-sync/protocol/openid-connect/certs
   mail:
     host: sandbox.smtp.mailtrap.io
     port: 587

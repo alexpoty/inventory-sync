@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class SupplierController {
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     @PostMapping
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<SupplierResponse> createSupplier(@Valid @RequestBody SupplierRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createSupplier(request));
     }
@@ -69,6 +71,7 @@ public class SupplierController {
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<SupplierResponse> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.updateSupplier(id, request));
     }
@@ -79,6 +82,7 @@ public class SupplierController {
             @ApiResponse(responseCode = "404", description = "Supplier not found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<SupplierResponse> deleteSupplier(@PathVariable Long id) {
         service.deleteSupplier(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
