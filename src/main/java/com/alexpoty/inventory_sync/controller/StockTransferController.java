@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class StockTransferController {
                     content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<StockTransferResponse> addStock(@Valid @RequestBody StockTransferRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(stockTransferService.addStock(request));
     }
@@ -91,6 +93,7 @@ public class StockTransferController {
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
     @PutMapping("/quantity")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<StockTransferResponse> addQuantity(@RequestParam Integer quantity, @RequestParam Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(stockTransferService.addQuantity(quantity, id));
     }

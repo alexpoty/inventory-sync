@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +32,7 @@ public class ProductController {
     })
     @PostMapping
     @ResponseBody
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
         log.info("Product Controller - Create Product");
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequest));
@@ -63,6 +65,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         log.info("Product Controller - Update Product");
         return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id, productRequest));
@@ -74,6 +77,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         log.info("Product Controller - Delete Product");
         productService.deleteProduct(id);
