@@ -1,9 +1,11 @@
 name: Publish
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
-      - publish
+      - "main"
 
 permissions:
   packages: write
